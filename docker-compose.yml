@@ -1,16 +1,35 @@
 version: '2.3'
 
 services:
-  statping:
-    container_name: statping
-    image: adamboutcher/statping-ng:latest
-    restart: always
-    volumes:
-      - statping_data:/app
-    environment:
-      DB_CONN: sqlite
-    ports:
-      - 8080:8080
+statping:
+  container_name: statping
+  image: adamboutcher/statping-ng
+  restart: always
+  depends_on:
+    - mysql
+  ports:
+    - 8080:8080
+  volumes:
+    - statping_data:/app
+  links:
+    - mysql
+  environment:
+    DB_CONN: mysql
+    DB_HOST: mysql
+    DB_PORT: 3306
+    DB_DATABASE: statping
+    DB_USER: root
+    DB_PASS: root
 
-volumes:
-  statping_data:
+mysql:
+  image: mysql:5.7
+  volumes:
+    - mysql_data:/var/lib/mysql
+  restart: always
+  ports:
+    - 3306:3306
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: statping
+    MYSQL_USER: root
+    MYSQL_PASSWORD: root
