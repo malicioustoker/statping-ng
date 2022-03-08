@@ -33,7 +33,7 @@ statping_get_tarball() {
       tar xzf $tarball_tmp -C "$temp"
     fi
     printf "$green> Installing to $DEST/statping-ng\n"
-    mv "$temp"/statping "$DEST"
+#    mv "$temp"/statping "$DEST"
     rm -rf "$temp"
     rm $tarball_tmp*
     printf "$cyan> Statping-ng is now installed! $reset\n"
