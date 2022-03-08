@@ -5,31 +5,32 @@ statping:
   container_name: statping
   image: adamboutcher/statping-ng
   restart: always
-  depends_on:
-    - mysql
   ports:
     - 8080:8080
   volumes:
     - statping_data:/app
   links:
-    - mysql
+    - postgres
+  depends_on:
+    - postgres
   environment:
-    DB_CONN: mysql
-    DB_HOST: mysql
-    DB_PORT: 3306
+    DB_CONN: postgres
+    DB_HOST: postgres
+    DB_PORT: 5432
     DB_DATABASE: statping
     DB_USER: root
-    DB_PASS: root
+    DB_PASS: password123
 
-mysql:
-  image: mysql:5.7
-  volumes:
-    - mysql_data:/var/lib/mysql
-  restart: always
+postgres:
+  container_name: postgres
+  image: postgres:10.0-alpine
   ports:
-    - 3306:3306
+    - 5432:5432
+  volumes:
+    - pg_data:/var/lib/postgresql/data/pg_data
   environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: statping
-    MYSQL_USER: root
-    MYSQL_PASSWORD: root
+    POSTGRES_PASSWORD: password123
+    POSTGRES_DB: statping
+    POSTGRES_USER: root
+    POSTGRES_PORT: 5432
+    PGDATA: /var/lib/postgresql/data/pg_data
